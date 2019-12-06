@@ -1,0 +1,49 @@
+::::: após modificar arquivos de migrações utilizar o comando 'composer dumpautoload' ::::::
+
+refresh migrate:
+php artisan migrate:refresh
+
+insert data com factory client:
+$client = factory(\App\Models\Client::class)->states(\App\Models\Client::TYPE_INDIVIDUAL)->make();
+
+insert data com factory team:
+$soccer = factory(App\Models\SoccerTeam::class)->create();
+
+insert data relacionamento client/team:
+$client->soccer_team_id = 1
+$client->save();
+
+insert data ClientProfile:
+App\Models\ClientProfile::create(['field' => 'qualquer coisa', 'client_id' => 4])
+
+consultar dados da relação:
+$client->soccerTeam->name
+
+seed com refresh
+php artisan migrate:refresh --seed
+
+query where:
+Client::where('name', 'like', 'Elnora%')->get();
+Client::where('name', 'like', 'Elnora%')->where('client_type', 'legal')->get();
+Client::where('name', 'like', 'Elnora%')->orWhere('sex', 'f')->get();
+Client::whereClientType('legal')->get();
+Client::whereName('Elnora Medhurst')->get();
+
+query orderby:
+Client::orderBy('name')->get();
+Client::orderBy('name', 'asc')->get();
+
+query count:
+Client::whereClientType('legal')->count();
+
+collection first:
+$result = Client::whereClientType('legal')->get();
+$result->first();
+
+collection last:
+$result = Client::whereClientType('legal')->get();
+$result->last()
+
+collection pluck:
+$result = Client::whereClientType('legal')->get();
+$result->pluck('name', 'id');
